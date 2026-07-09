@@ -4,7 +4,7 @@ services:
     container_name: App_Login
     restart: unless-stopped
     environment:
-      POSTGRES_USER: sebastian
+      POSTGRES_USER: app_user
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: App_Login
     ports:

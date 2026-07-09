@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": ["./backend"],
+    "python.defaultInterpreterPath": "./backend/venv/bin/python3.13"
+}
+// Apuntar al PATH de python dentro del entorno virtual
