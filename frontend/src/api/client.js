@@ -1,26 +1,26 @@
-const BASE_URL = "http://localhost:80000";
+const BASE_URL = "http://localhost:8000"
 
 export async function apiRequest(path, options = {}) {
-    const reponse = await fetch(`${BASE_URL}${path}`,{
-        ...options,
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-            ...options.headers,
-        },
-    })
+  const response = await fetch(`${BASE_URL}${path}`, {
+    ...options,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
 
-    let data = null
-    try {
-        data = await reponse.json()
-    } catch {
-        data = null
-    }
+  let data = null
+  try {
+    data = await response.json()
+  } catch (parseErr) {
+    data = null
+  }
 
-    if (!reponse.ok) {
-        const message  = data?.message || "Ocurrio un error"
-        throw new Error(message)
-    }
+  if (!response.ok) {
+    const message = data?.detail || "Ocurrió un error"
+    throw new Error(message)
+  }
 
-    return data
+  return data
 }
