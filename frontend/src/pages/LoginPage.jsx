@@ -19,10 +19,9 @@ function LoginPage() {
         await login(identifier, password)
         navigate('/')
       } catch (err) {
-        console.log('Error capturado:', err.message)
-        setError(err.message)
+          setError(err.message)
       } finally {
-        setLoading(false)
+          setLoading(false)
       }
 }
 
