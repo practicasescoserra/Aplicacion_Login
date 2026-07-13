@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.config import settings
 
 from app.routers import auth, users
 
@@ -7,7 +8,7 @@ app = FastAPI(title="Mi App Login")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = ["http://localhost:5173"],
+    allow_origins = [settings.frontend_url],
     allow_credentials = True,
     allow_methods = ["*"],
     allow_headers = ["*"],

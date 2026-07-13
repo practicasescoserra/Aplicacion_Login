@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     jwt_algorithm: str
     access_token_expire_minutes:int
     refresh_token_expire_days: int
+    frontend_url: str
 
     class Config:
         env_file = ".env"

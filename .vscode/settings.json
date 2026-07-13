@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": ["./backend"],
-    "python.defaultInterpreterPath": "./backend/venv/bin/python3.13"
+    "python.defaultInterpreterPath": "./backend/venv/bin/python3.13",
+    "python-envs.defaultEnvManager": "ms-python.python:system"
 }
 // Apuntar al PATH de python dentro del entorno virtual

@@ -1,13 +1,26 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 function ProfilePage() {
-  const { user, logout } = useAuth()
+  const { user, logout, authRequest } = useAuth()
   const navigate = useNavigate()
+  const [refreshing, setRefreshing] = useState(false)
 
   async function handleLogout() {
     await logout()
     navigate('/login')
+  }
+
+  async function handleRefreshData() {
+    setRefreshing(true)
+    try {
+      await authRequest('/users/me')
+    } catch {
+      navigate('/login')
+    } finally {
+      setRefreshing(false)
+    }
   }
 
   const initial = user?.username?.[0]?.toUpperCase() || '?'
@@ -35,6 +48,15 @@ function ProfilePage() {
               <p className="text-sm mt-0.5">{user?.full_name || '—'}</p>
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={handleRefreshData}
+            disabled={refreshing}
+            className="w-full text-xs text-[#8B8F97] hover:text-[#C9A227] disabled:opacity-50 mb-4 transition-colors"
+          >
+            {refreshing ? 'Verificando...' : 'Refrescar datos'}
+          </button>
 
           <div className="h-px bg-[#2A2D33] mb-6"></div>
 
