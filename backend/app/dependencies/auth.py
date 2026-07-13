@@ -1,3 +1,8 @@
+# Dependencia de FastAPI: valida el JWT y verifica que el usuario exista y esté activo.
+# Se "inyecta" con Depends() en cualquier endpoint que requiera autenticación;
+# si falla, corta la petición con 401 antes de llegar al código del endpoint.
+
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,6 +16,7 @@ from app.services.security import decode_acces_token
 bearer_scheme = HTTPBearer()
 
 
+#Consulta si el usuario sigue existiendo
 async def get_current_user(
         credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme), # FastAPI revisa la peticion y busca el header
         db: AsyncSession = Depends(get_db), # FastAPI inicia automáticamente la sesión de base de datos

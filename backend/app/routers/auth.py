@@ -21,21 +21,21 @@ REFRESH_COOKIE_NAME = "refresh_token"  # Nombre de la cookie para el token de ac
 
 
 # Registro de usuario
-@router.post("/register", response_model = UserResponse, 
-             status_code = status.HTTP_201_CREATED) # UserResponse para no devolver la contraseña
+@router.post("/register", response_model = UserResponse, status_code = status.HTTP_201_CREATED)
+# UserRegister para que FastAPI valide el JSON y Depends(get_db) para iniciar la sesion hacia la BD
 async def register(data: UserRegister, db: AsyncSession = Depends(get_db)):
 
     # Busca si ya existe un usuario con el mismo nombre de usuario o correo electrónico
     result = await db.execute(  
         select(User).where(or_(User.username == data.username, User.email == data.email)) 
     )
-    if result.scalar_one_or_none() is not None:
+    if result.scalar_one_or_none() is not None: # Si ya existe uno entonces lanza un error
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="El nombre de usuario o correo electrónico ya está en uso",
         )
     
-    # Crea un nuevo usuario y lo guarda en la base de datos
+    # Crea una instancia del modelo User y lo guarda en la BD
     new_user = User(
         username = data.username,
         email = data.email,
@@ -58,13 +58,14 @@ async def login(data: LoginRequest, response: Response, db: AsyncSession = Depen
     )
     user = result.scalar_one_or_none()
 
-    if user is None or not verify_password(data.password, user.password_hash):
+    # Compara la contraseña ingresada contra la contraseña ya hasheda en la BD
+    if user is None or not verify_password(data.password, user.password_hash): 
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Credenciales inválidas",
         )
     
-    access_token = create_access_token(user.id) # Se creal el acces token desde la funcion de security.py
+    access_token = create_access_token(user.id) # Se crea el access token desde la funcion de security.py
 
     # Genera un refresh token
     raw_refresh_token = generate_refresh_token()

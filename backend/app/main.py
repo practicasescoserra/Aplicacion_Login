@@ -4,8 +4,9 @@ from app.config import settings
 
 from app.routers import auth, users
 
-app = FastAPI(title="Mi App Login")
+app = FastAPI(title="Mi App Login") # Crea instancia de la app para usarla con uvicorn
 
+# Middleware de CORS (Intercepta peticiones, agregando headers para poder comunicarse con el frontend)
 app.add_middleware(
     CORSMiddleware,
     allow_origins = [settings.frontend_url],
@@ -14,10 +15,11 @@ app.add_middleware(
     allow_headers = ["*"],
 )
 
+# Para que la app sepa de la existencia de los endpoints /auth/login, /auth/register, etc
 app.include_router(auth.router)
 app.include_router(users.router)
 
-
+# Verificacion rapida que el servidor esta corriendo
 @app.get("/")
 async def root():
     return {"message": "API funcionando"}
